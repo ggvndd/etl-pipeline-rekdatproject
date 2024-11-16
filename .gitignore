@@ -1,0 +1,22 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+
+# SQLite database
+*.sqlite3
+
+# Docker
+.docker/
+.dockerignore
+
+# Airflow
+logs/
+
+# Jupyter Notebook checkpoint
+.ipynb_checkpoints/
