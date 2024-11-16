@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  webserver:
+    image: apache/airflow:2.7.0
+    container_name: airflow_webserver
+    environment:
+      - LOAD_EXAMPLES=no
+      - EXECUTOR=SequentialExecutor
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - 8080:8080
+    command: webserver
