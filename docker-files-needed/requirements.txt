@@ -1,3 +1,7 @@
 pandas
 requests
 apache-airflow
+psycopg2
+pytrends
+tweepy
+
