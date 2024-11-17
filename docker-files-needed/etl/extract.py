@@ -4,7 +4,7 @@ import pytrends
 def fetch_twitter_trends(bearer_token, location_woeid=1):
     try:
         # Authenticate using Bearer Token
-        client = tweepy.Client(bearer_token='Y4K5XS0tSgQenATkq51A0XGAGGsuYDux2lMr7Gj06ooEzePp09')
+        client = tweepy.Client(bearer_token='')
 
         # Get trending topics for the location
         response = client.get_trends_place(1)
