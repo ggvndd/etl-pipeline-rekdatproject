@@ -1,15 +1,6 @@
-# Gunakan image Python versi 3.10 sebagai dasar
-FROM python:3.10-slim
+# Use the official Airflow image as a base
+FROM apache/airflow:2.5.1
 
-# Set direktori kerja di dalam container
-WORKDIR /app
-
-# Salin file requirements.txt dan install dependencies
-COPY requirements.txt requirements.txt
+# Copy and install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Salin seluruh file ke dalam container
-COPY . .
-
-# Command default saat container dijalankan
-CMD ["python", "main.py"]

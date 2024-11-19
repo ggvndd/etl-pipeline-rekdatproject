@@ -1,13 +1,49 @@
-version: '3.8'
 services:
-  webserver:
-    image: apache/airflow:2.7.0
-    container_name: airflow_webserver
+  postgres:
+    image: postgres:13
     environment:
-      - LOAD_EXAMPLES=no
-      - EXECUTOR=SequentialExecutor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: joshuadun
+      POSTGRES_DB: etl_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:joshuadun@postgres:5432/etl_db
+      AIRFLOW__CORE__FERNET_KEY: 'TDZjtDR_vYduNbIx7p_u30SFAsaoahzAwMbmuCnDs3w='
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     volumes:
       - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
     ports:
-      - 8080:8080
+      - "8080:8080"
+    depends_on:
+      - postgres
     command: webserver
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:joshuadun@postgres:5432/etl_db
+      AIRFLOW__CORE__FERNET_KEY: 'TDZjtDR_vYduNbIx7p_u30SFAsaoahzAwMbmuCnDs3w='
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    depends_on:
+      - postgres
+    command: scheduler
+
+volumes:
+  postgres_data:

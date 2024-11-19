@@ -1,7 +1,5 @@
 pandas
 requests
-apache-airflow
-psycopg2
-pytrends
-tweepy
-
+yfinance
+psycopg2-binary
+textblob
