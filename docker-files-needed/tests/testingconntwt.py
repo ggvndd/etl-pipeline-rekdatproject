@@ -23,8 +23,8 @@ def test_twitter_connection(api_key, api_key_secret, access_token, access_token_
 # Test your connection
 if __name__ == "__main__":
     test_twitter_connection(
-        api_key = 'qvX4Zq69gxYO9bmPpcE2HBzWR',
-        api_key_secret = 'CNhVsfWIH8wkB7xNMHXmhQVlmUrSm8ruO3p8XpUBKRApFzhR7k',
-        access_token = '1081790378729066497-ISlmB5WusykCcDjwftd3TtfaLTsKiV',
-        access_token_secret = '6yYU43aRCmnliSUOymRXFKFwVSiDZOzOMtLKZNg8NzHtw'
+        api_key = 'api_key',
+        api_key_secret = 'api_key_secret',
+        access_token = 'access_token',
+        access_token_secret = 'access_token_secret'
     )
