@@ -15,9 +15,3 @@ def transform_stock_data(stock_df):
     # For now, return as-is
     return stock_df
 
-# Example usage
-transformed_news = transform_news_data(news_data)
-transformed_stock = transform_stock_data(stock_data)
-
-print(transformed_news.head())  # Verify transformed data
-print(transformed_stock.head())  # Verify transformed data

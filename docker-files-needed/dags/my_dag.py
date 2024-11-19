@@ -3,9 +3,9 @@ from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 
 # Import functions from the ETL scripts
-from etl.extract import extract_function
-from etl.transform import transform_function
-from etl.load import load_function
+from etl.extract import extract_news, extract_stock_data
+from etl.transform import transform_news_data, transform_stock_data
+from etl.load import load_data_to_postgres
 
 default_args = {
     'owner': 'airflow',
@@ -20,20 +20,35 @@ with DAG(
     schedule_interval='@daily',
 ) as dag:
 
-    extract_task = PythonOperator(
-        task_id='extract',
-        python_callable=extract_function,
+    # Separate extraction tasks
+    extract_news_task = PythonOperator(
+        task_id='extract_news',
+        python_callable=extract_news,
     )
 
-    transform_task = PythonOperator(
-        task_id='transform',
-        python_callable=transform_function,
+    extract_stock_task = PythonOperator(
+        task_id='extract_stock',
+        python_callable=extract_stock_data,
     )
 
+    # Separate transformation tasks
+    transform_news_task = PythonOperator(
+        task_id='transform_news',
+        python_callable=transform_news_data,
+    )
+
+    transform_stock_task = PythonOperator(
+        task_id='transform_stock',
+        python_callable=transform_stock_data,
+    )
+
+    # Load task (assuming it takes transformed data as input)
     load_task = PythonOperator(
         task_id='load',
-        python_callable=load_function,
+        python_callable=load_data_to_postgres,
     )
 
     # Set task dependencies
-    extract_task >> transform_task >> load_task
+    extract_news_task >> transform_news_task
+    extract_stock_task >> transform_stock_task
+    [transform_news_task, transform_stock_task] >> load_task

@@ -1,0 +1,34 @@
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from datetime import datetime
+from scripts.export_data import export_tables_to_csv  # Import your function
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2023, 11, 1),  # Adjust as needed
+}
+
+with DAG(
+    'export_tables_dag',
+    default_args=default_args,
+    description='Export tables from PostgreSQL',
+    schedule_interval='@daily',  # Adjust the schedule as needed
+) as dag:
+    
+    export_task = PythonOperator(
+        task_id='export_tables',
+        python_callable=export_tables_to_csv,
+        op_kwargs={
+            'db_config': {
+                'dbname': 'etl_db',
+                'user': 'postgres',
+                'password': 'joshuadun',
+                'host': 'localhost',
+                'port': '5432'
+            },
+            'news_output_path': 'D:/College/Sem 5/Data Engineering/HasilETL/news.csv',
+            'stock_output_path': 'D:/College/Sem 5/Data Engineering/HasilETL/stock.csv'
+        }
+    )
+
+    export_task
