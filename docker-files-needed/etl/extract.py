@@ -2,50 +2,60 @@ import tweepy
 import pytrends
 
 def fetch_twitter_trends(api_key, api_key_secret, access_token, access_token_secret, location_woeid=1):
+    """
+    Fetch Twitter trends for a specific location using Twitter's v1.1 API.
+    """
     try:
-        # Authenticate with OAuth1
-        auth = tweepy.OAuth1UserHandler(
-            api_key, api_key_secret, access_token, access_token_secret
-        )
-        client = tweepy.API(auth)
+        # Authenticate with API v1.1
+        auth = tweepy.OAuthHandler(api_key, api_key_secret)
+        auth.set_access_token(access_token, access_token_secret)
+        api = tweepy.API(auth)
 
-        # Get trends
-        response = client.trends_place(location_woeid)
-        trends = response[0]["trends"]
+        # Get trends for the specified location (default: worldwide)
+        trends = api.get_place_trends(location_woeid)
 
-        # Parse trends
-        parsed_trends = [
-            {
-                "topic": trend["name"],
-                "tweet_volume": trend.get("tweet_volume", 0),
-                "timestamp": response[0]["as_of"]
-            }
-            for trend in trends
-        ]
+        # Debugging: Log raw API response
+        print("Raw Twitter API Response:", trends)
 
-        print(f"Fetched {len(parsed_trends)} trending topics from Twitter.")
+        # Validate and parse trends
+        if trends and isinstance(trends, list) and "trends" in trends[0]:
+            parsed_trends = [
+                {
+                    "topic": trend.get("name").strip().lower() if trend.get("name") else None,
+                    "tweet_volume": trend.get("tweet_volume", 0),
+                }
+                for trend in trends[0]["trends"]
+                if trend.get("name") and trend.get("tweet_volume") and trend["tweet_volume"] > 0
+            ]
+            print(f"Fetched {len(parsed_trends)} trending topics with significant tweet volume.")
+        else:
+            parsed_trends = []
+            print("No trends found or invalid response format.")
+
         return parsed_trends
 
     except Exception as e:
         print(f"Error fetching Twitter trends: {e}")
         return []
 
-from pytrends.request import TrendReq    
 
-def fetch_google_trends(keywords, timeframe="now 1-d"):
+from pytrends.request import TrendReq
+
+def fetch_google_trends(keywords):
+    """
+    Fetch Google Trends data for the specified keywords.
+    """
     try:
-        pytrends = TrendReq(hl='en-US', tz=360)
-        pytrends.build_payload(kw_list=keywords, timeframe=timeframe)
-        interest_over_time = pytrends.interest_over_time()
+        if not keywords or len(keywords) == 0:
+            raise ValueError("Keyword list is empty. Provide at least one keyword.")
 
-        if not interest_over_time.empty:
-            trends = interest_over_time.reset_index()[["date"] + keywords]
-            print(f"Fetched Google trends for {len(keywords)} keywords.")
-            return trends
-        else:
-            print("No Google Trends data available for the given keywords.")
-            return []
+        pytrends = TrendReq(hl="en-US", tz=360)
+        pytrends.build_payload(kw_list=keywords, timeframe="now 1-d")
+        
+        trends = pytrends.related_queries()
+        print(f"Successfully fetched Google trends for keywords: {keywords}")
+        return trends
 
     except Exception as e:
         print(f"Error fetching Google Trends: {e}")
-        return []
+        return {}
