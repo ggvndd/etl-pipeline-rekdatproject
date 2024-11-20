@@ -1,11 +1,7 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
-
-# Import functions from the ETL scripts
-from etl.extract import extract_news, extract_stock_data
-from etl.transform import transform_news_data, transform_stock_data
-from etl.load import load_data_to_postgres
+from etl.etl import extract_news, extract_stock_data, transform_news_data, transform_stock_data, load_data_to_postgres
 
 default_args = {
     'owner': 'airflow',
@@ -13,42 +9,34 @@ default_args = {
     'retries': 1,
 }
 
+def etl_pipeline():
+    api_key = 'a832dc14477649e4ae67b07416fa5023'
+    news_data = extract_news(api_key)
+    stock_data = extract_stock_data('AAPL')
+
+    transformed_news = transform_news_data(news_data)
+    transformed_stock = transform_stock_data(stock_data)
+
+    db_config = {
+        'dbname': 'etl_db',
+        'user': 'postgres',
+        'password': 'joshuadun',
+        'host': 'localhost',
+        'port': '5432'
+    }
+    
+    load_data_to_postgres(transformed_news, transformed_stock, db_config)
+
 with DAG(
-    'my_etl_dag',
+    'etl_pipeline_dag',
     default_args=default_args,
-    description='An example ETL DAG',
+    description='Combined ETL pipeline DAG',
     schedule_interval='@daily',
 ) as dag:
 
-    # Separate extraction tasks
-    extract_news_task = PythonOperator(
-        task_id='extract_news',
-        python_callable=extract_news,
+    etl_task = PythonOperator(
+        task_id='etl_pipeline_task',
+        python_callable=etl_pipeline,
     )
 
-    extract_stock_task = PythonOperator(
-        task_id='extract_stock',
-        python_callable=extract_stock_data,
-    )
-
-    # Separate transformation tasks
-    transform_news_task = PythonOperator(
-        task_id='transform_news',
-        python_callable=transform_news_data,
-    )
-
-    transform_stock_task = PythonOperator(
-        task_id='transform_stock',
-        python_callable=transform_stock_data,
-    )
-
-    # Load task (assuming it takes transformed data as input)
-    load_task = PythonOperator(
-        task_id='load',
-        python_callable=load_data_to_postgres,
-    )
-
-    # Set task dependencies
-    extract_news_task >> transform_news_task
-    extract_stock_task >> transform_stock_task
-    [transform_news_task, transform_stock_task] >> load_task
+    etl_task
