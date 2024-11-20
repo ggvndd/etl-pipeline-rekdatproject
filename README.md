@@ -1,116 +1,147 @@
-🚀 Wait, Is AI Regulation Actually Moving the Market?
-Exploring the intersection of AI policies and stock market trends in the tech world.
+# Wait, Is AI Regulation Actually Moving the Market?
+🚀 Exploring the intersection of AI policies and stock market trends in the tech world.
 
-📜 Description
-Artificial Intelligence (AI) is the rockstar of tech right now, but not all the buzz is about shiny new products. Governments worldwide are stepping in with discussions around rules, ethics, and regulations. The big question is: are these discussions moving the stock market? 🚨
-
-In this project, we analyze whether news about AI regulations affects the stock prices of tech giants like Microsoft and NVIDIA. By combining news sentiment analysis, stock market data, and a fully automated ETL pipeline, we explore whether policy headlines create real market movement. Let’s uncover whether the hype about AI regulations drives real market changes or is just noise! 💥
-
-🎯 Objectives
-This project aims to explore the connection between news headlines and stock market trends by:
-
-Collecting news articles related to AI regulations and ethics.
-Tracking stock data for major tech companies driving AI innovation (e.g., Microsoft, NVIDIA).
-Analyzing the correlation between sentiment in the news and stock price movement.
-Automating the entire pipeline from data extraction to visualization using Docker and Apache Airflow.
-🛠️ Technology Stack
-Components and Tools
-Component	Technology	Purpose
-Data Sources	NewsAPI, Yahoo Finance (yfinance)	Fetch news and stock market data.
-ETL Orchestration	Apache Airflow	Automates and schedules the ETL pipeline.
-Data Transformation	Python (pandas, textblob)	Handles data cleaning, aggregation, and sentiment analysis.
-Data Storage	PostgreSQL	Centralized database for structured data storage and querying.
-Containerization	Docker	Ensures consistent environment setup across systems.
-Visualization	Python (matplotlib, seaborn)	Creates visualizations for data analysis and insights.
-🗄️ Database Schema
-We use PostgreSQL as the data warehouse. Here’s the schema:
-
-sql
-Copy code
-CREATE TABLE news (
-    id SERIAL PRIMARY KEY,
-    date DATE,
-    title TEXT,
-    description TEXT,
-    sentiment_score FLOAT,
-    source VARCHAR(255)
-);
-
-CREATE TABLE stock (
-    id SERIAL PRIMARY KEY,
-    date DATE,
-    close_price FLOAT,
-    volume BIGINT
-);
-🌐 End-to-End ETL Pipeline
-Workflow Breakdown
-Extract Phase (Data Ingestion)
-
-News Data: Collected from NewsAPI using relevant keywords (e.g., "AI regulations").
-Stock Data: Historical stock data fetched from Yahoo Finance for key companies (e.g., Microsoft, NVIDIA).
-Transform Phase (Data Processing)
-
-News Data:
-Sentiment analysis is applied using TextBlob.
-Data is aggregated by date to calculate average sentiment and news count.
-Stock Data:
-Data is cleaned, aligned, and transformed for date-based analysis.
-Load Phase (Data Storage)
-
-Processed datasets are loaded into PostgreSQL tables for centralized storage and querying.
-Analysis Phase
-
-Sentiment scores and stock performance are merged for correlation analysis.
-Time series analysis is performed to explore trends over time.
-Visualization Phase
-
-Insights are presented through scatterplots, trend lines, and correlation charts.
-📊 Insights from Predictive Modeling
-Sentiment and Stock Performance
-
-Sentiment analysis provided meaningful predictors for stock movement.
-Lagged features and moving averages improved model accuracy.
-Model Results
-
-Mean Squared Error (MSE): 0.0155
-Predictions closely align with actual stock prices, demonstrating the model's reliability.
-Key Correlations
-
-Positive sentiment correlates with increased stock prices.
-News frequency impacts trading volume.
-⚙️ How to Run the Project
-1. Set Up Docker
-Ensure Docker is installed on your system. Build the Docker image:
-
-bash
-Copy code
-docker build -t etl-ai-market .
-Run the container:
-
-bash
-Copy code
-docker run --rm -v $(pwd):/app etl-ai-market
-2. Verify Output
-PostgreSQL Database:
-Check the tables (news and stock) to ensure data is correctly loaded.
-
-CSV Export:
-Transformed data will also be saved in output_data.csv for verification.
-
-📚 Resources
-Presentation Video: [Add Link Here]
-Notion Documentation: [Add Link Here]
-Colab Notebook: [Add Link Here]
-🚀 Future Enhancements
-Expand Scope
-Analyze additional companies (e.g., Google, Amazon) for broader insights.
-Advanced Modeling
-Incorporate machine learning models like Random Forest or XGBoost for improved prediction accuracy.
-Dashboard Integration
-Build an interactive dashboard using tools like Streamlit or Tableau for real-time insights.
-📬 Contact
-For questions or contributions, reach out to the team:
-
+📚 Team Members
 Gavind Muhammad Pramahita
 Emir Abe Putra Agastha
 Muhammad Zidane Septian Irsyadi
+🛠️ Dependencies
+Software
+Docker
+For virtual environment and container management.
+Python
+Main programming language for this project.
+PostgreSQL
+Used as the data warehouse to store processed data.
+Python Libraries
+Make sure the following libraries are installed in your environment:
+
+pandas
+requests
+apache-airflow
+psycopg2
+yfinance
+textblob
+matplotlib
+All libraries will be automatically installed when the Docker container is built (defined in requirements.txt).
+
+💡 Project Description
+Artificial Intelligence (AI) is the rockstar of tech right now, but not all the buzz is about shiny new products. Governments worldwide are starting to step in, talking about rules, ethics, and regulations. But here’s the juicy part: are these discussions actually moving the stock market? 🚨
+
+This project explores whether news about AI regulations impacts the share prices of tech giants like Microsoft and NVIDIA. Using news sentiment analysis, stock market data, and an automated ETL pipeline, we investigated the connection between headlines and bottom lines.
+
+🎯 Objectives
+Our goal was to design an automated solution that connects news headlines with stock data to determine if AI regulations influence the market. We focused on:
+
+Collecting News Data: Articles discussing AI regulations and ethics.
+Tracking Stock Data: Historical data for major tech companies involved in AI (e.g., Microsoft, NVIDIA).
+Analyzing Impact: Exploring correlations between news sentiment and stock market performance.
+Ultimately, we sought to answer:
+
+❓ Is the hype about AI regulations driving real market changes, or is it just talk?
+
+🛠️ Technology Architecture Design
+1. End-to-End Workflow
+The project workflow is broken into distinct phases, each contributing to the ETL pipeline:
+
+Extract Phase
+News Data:
+Retrieved via NewsAPI.
+Extracted fields include: title, description, source, and publication date.
+Stock Data:
+Retrieved using the yfinance library.
+Extracted fields include: closing price, volume, and date.
+Transform Phase
+News Data:
+Performed sentiment analysis using TextBlob.
+Aggregated daily sentiment scores and article counts.
+Stock Data:
+Filtered relevant columns (e.g., closing price, volume) and ensured date alignment.
+Output:
+Two datasets: news_summary and transformed_stock.
+Load Phase
+Processed data is stored in a PostgreSQL database with two tables:
+news: For aggregated news data (e.g., sentiment scores, article count).
+stock: For stock market data (e.g., closing prices, trading volume).
+Analysis Phase
+Correlation analysis between sentiment and stock price.
+Time-series visualization of trends in sentiment and stock performance.
+🗄️ Database Structure
+PostgreSQL Database:
+The data is stored in two tables:
+
+news
+
+Column	Data Type	Description
+id	SERIAL	Primary key
+date	TIMESTAMP	Date of the news headline
+avg_sentiment	FLOAT	Average sentiment score of articles
+news_count	INTEGER	Number of articles on the date
+stock
+
+Column	Data Type	Description
+id	SERIAL	Primary key
+date	TIMESTAMP	Date of stock data
+close_price	FLOAT	Closing stock price
+volume	INTEGER	Trading volume
+🚀 How to Run the Project
+1. Build the Docker Image
+bash
+Copy code
+docker build -t etl-project .
+2. Run the Docker Container
+bash
+Copy code
+docker run --rm -v $(pwd):/app etl-project
+3. Verify the Output
+The processed data will be saved in a CSV file (output_data.csv) or loaded into the PostgreSQL database.
+🌐 Architecture Overview
+Components
+Data Sources:
+NewsAPI: Provides news data related to "AI regulations."
+Yahoo Finance: Provides stock data for relevant companies (e.g., Microsoft, NVIDIA).
+ETL Pipeline:
+Extract: Collects raw data from APIs.
+Transform: Cleans, enriches, and aligns data for analysis.
+Load: Stores processed data in a PostgreSQL database.
+Analysis and Visualization:
+Correlation analysis between sentiment and stock prices.
+Generated visualizations of trends and patterns.
+📊 Analysis Process
+Step 1: Load and Inspect Data
+Data is loaded into pandas DataFrames.
+Data types and missing values are inspected to ensure completeness.
+Step 2: Data Cleaning
+Removes duplicates and fills missing values.
+Ensures proper date formatting for merging datasets.
+Step 3: Merge Datasets
+News and stock data are merged on the date column.
+Step 4: Feature Engineering
+Added new features like:
+Price change (price_change).
+Rolling averages for sentiment and stock prices.
+Lagged features to capture historical trends.
+Step 5: Predictive Modeling
+Trained a linear regression model to predict stock prices using:
+Sentiment scores.
+Historical stock performance data.
+🛠️ Results and Insights
+Key Findings
+Model Performance:
+Regression model achieved a low Mean Squared Error (MSE) (~0.0155).
+Correlation Analysis:
+Strong positive correlation between news sentiment and stock prices.
+Increased news volume coincided with higher trading activity.
+Visualizations
+Line charts showing sentiment vs. stock prices over time.
+Scatterplots visualizing the correlation between sentiment and stock performance.
+🎥 Links
+Presentation Video: (Add link here)
+Colab Notebook: (Add link here)
+Notion Documentation: (Add link here)
+🛠️ Monitoring and Debugging
+Airflow Monitoring
+Monitor DAG execution and logs using the Airflow UI.
+Error Handling
+Automatically retries failed tasks.
+Alerts the user if errors persist.
