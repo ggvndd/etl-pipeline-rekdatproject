@@ -12,7 +12,7 @@ Exploring the intersection of AI policies and stock market trends in the tech wo
 ---
 
 ## 🎥 Links
-- **[Presentation Video](https://youtu.be/nx7jZbN7Z6Q)**  
+- **[Presentation Video](https://www.youtube.com/watch?v=nx7jZbN7Z6Q)**  
 - **[Colab Notebook](https://colab.research.google.com/drive/1HosNsGa7rWSpeI4nCgMkadAOLlCKzzRi?usp=sharing)**  
 - **[Notion Documentation](https://mzidane.notion.site/Wait-Is-AI-Regulation-Actually-Moving-the-Market-1430bc51572380f3b896f552975b163c?pvs=4)**  
 
