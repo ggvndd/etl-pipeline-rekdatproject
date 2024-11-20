@@ -9,6 +9,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
 
   webserver:
     build:
@@ -28,6 +30,8 @@ services:
     depends_on:
       - postgres
     command: webserver
+    networks:
+      - my_network
 
   scheduler:
     build:
@@ -44,6 +48,11 @@ services:
     depends_on:
       - postgres
     command: scheduler
+    networks:
+      - my_network
 
 volumes:
   postgres_data:
+networks:
+  my_network:
+    driver: bridge

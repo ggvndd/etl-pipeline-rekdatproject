@@ -21,7 +21,7 @@ def etl_pipeline():
         'dbname': 'etl_db',
         'user': 'postgres',
         'password': 'joshuadun',
-        'host': 'localhost',
+        'host': 'postgres',
         'port': '5432'
     }
     
