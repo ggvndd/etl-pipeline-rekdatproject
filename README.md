@@ -173,8 +173,8 @@ A **linear regression model** was trained to predict stock prices using:
 
 ## 🎥 Links
 - **[Presentation Video](#)**  
-- **[Colab Notebook](#)**  
-- **[Notion Documentation](#)**  
+- **[Colab Notebook](#https://colab.research.google.com/drive/1HosNsGa7rWSpeI4nCgMkadAOLlCKzzRi?usp=sharing)**  
+- **[Notion Documentation](#https://www.notion.so/mzidane/Wait-Is-AI-Regulation-Actually-Moving-the-Market-1430bc51572380f3b896f552975b163c#1430bc5157238001bc7ae3d4582ccbf3)**  
 
 ---
 
