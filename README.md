@@ -1,11 +1,11 @@
 # Wait, Is AI Regulation Actually Moving the Market?
 🚀 Exploring the intersection of AI policies and stock market trends in the tech world.
 
-📚 Team Members
+##📚 Team Members
 Gavind Muhammad Pramahita
 Emir Abe Putra Agastha
 Muhammad Zidane Septian Irsyadi
-🛠️ Dependencies
+##🛠️ Dependencies
 Software
 Docker
 For virtual environment and container management.
